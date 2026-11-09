@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gửi tin Zalo cho khách hàng</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E💬%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3f6fb;--panel:#fff;--ink:#14213d;--mute:#5b6882;--line:#dbe3f0;--brand:#0068ff;--brand-ink:#fff;--ok:#12805c;--warn:#b45309;--bad:#c0392b;--chip:#e8f0ff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1626;--panel:#16213a;--ink:#e7edf9;--mute:#9aa8c4;--line:#2a3857;--brand:#4d94ff;--brand-ink:#04122b;--ok:#4cc79a;--warn:#f0a94a;--bad:#ff7b6b;--chip:#1d2f55;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0e1626;--panel:#16213a;--ink:#e7edf9;--mute:#9aa8c4;--line:#2a3857;--brand:#4d94ff;--brand-ink:#04122b;--ok:#4cc79a;--warn:#f0a94a;--bad:#ff7b6b;--chip:#1d2f55;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 "Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1000px;margin:0 auto;padding:16px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+h1{font-size:20px;margin:0;font-weight:700}
+.sim{background:var(--chip);color:var(--brand);padding:4px 10px;border-radius:99px;font-size:13px;font-weight:500}
+nav{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:16px;overflow-x:auto}
+nav button{background:none;border:0;border-bottom:3px solid transparent;color:var(--mute);padding:10px 14px;font:inherit;font-weight:500;cursor:pointer;white-space:nowrap}
+nav button[aria-selected="true"]{color:var(--brand);border-color:var(--brand)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:16px}
+h2{font-size:16px;margin:0 0 10px}
+label{display:block;font-weight:500;margin:10px 0 4px}
+input,textarea,select{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px 10px}
+textarea{min-height:110px;resize:vertical}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.btn{background:var(--brand);color:var(--brand-ink);border:0;border-radius:6px;padding:9px 16px;font:inherit;font-weight:500;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--brand);border:1px solid var(--brand)}
+.btn.danger{background:transparent;color:var(--bad);border:1px solid var(--bad)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:520px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--mute);font-weight:500;font-size:13px}
+.note{color:var(--mute);font-size:13px}
+.chip{display:inline-block;background:var(--chip);color:var(--brand);border-radius:99px;padding:1px 9px;font-size:12px;cursor:pointer;margin:2px 4px 2px 0;border:0;font-family:inherit}
+.bubble{background:var(--chip);border-radius:12px 12px 12px 2px;padding:12px 14px;white-space:pre-wrap;max-width:420px}
+.ok{color:var(--ok)}.warn{color:var(--warn)}.bad{color:var(--bad)}
+.hide{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Gửi tin Zalo cho khách hàng</h1>
+  <span class="sim">Chế độ mô phỏng: chưa kết nối Zalo OA</span>
+</header>
+<nav role="tablist" id="tabs">
+  <button role="tab" data-t="kh" aria-selected="true">Khách hàng</button>
+  <button role="tab" data-t="soan" aria-selected="false">Soạn tin</button>
+  <button role="tab" data-t="lich" aria-selected="false">Lịch gửi</button>
+  <button role="tab" data-t="nhatky" aria-selected="false">Nhật ký</button>
+  <button role="tab" data-t="cd" aria-selected="false">Cài đặt</button>
+</nav>
+
+<section id="p-kh">
+  <div class="card">
+    <h2>Nhập danh sách khách</h2>
+    <p class="note">Dán từ Excel hoặc CSV, mỗi dòng một khách theo thứ tự: Tên, Số điện thoại, Nhóm, Ghi chú. Dòng tiêu đề sẽ tự bỏ qua.</p>
+    <textarea id="paste" placeholder="Nguyễn Văn A	0901234567	Khách 2024	Hệ 10kWp"></textarea>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" id="addPaste">Thêm vào danh sách</button>
+      <input type="file" id="file" accept=".csv,.txt,.tsv" style="width:auto">
+      <span id="impMsg" class="note"></span>
+    </div>
+  </div>
+  <div class="card">
+    <div class="row" style="justify-content:space-between"><h2 id="khTitle">Danh sách khách</h2>
+      <div class="row"><input id="search" placeholder="Tìm tên hoặc số" style="width:200px"><button class="btn danger" id="clearAll">Xóa tất cả</button></div></div>
+    <div class="tbl"><table><thead><tr><th>Tên</th><th>Số Zalo</th><th>Nhóm</th><th>Ghi chú</th><th></th></tr></thead><tbody id="khBody"></tbody></table></div>
+    <p id="khEmpty" class="note hide">Chưa có khách nào. Dán danh sách ở phía trên để bắt đầu.</p>
+  </div>
+</section>
+
+<section id="p-soan" class="hide">
+  <div class="grid">
+    <div class="card">
+      <h2>Mẫu tin nhắn</h2>
+      <label for="tpl">Nội dung (bấm biến để chèn)</label>
+      <div id="vars"></div>
+      <textarea id="tpl"></textarea>
+      <p class="note">Với ZNS, nội dung phải trùng mẫu Zalo đã duyệt. Biến ở đây sẽ ứng với tham số của mẫu đó.</p>
+    </div>
+    <div class="card">
+      <h2>Xem trước</h2>
+      <label for="pv">Xem với khách</label>
+      <select id="pv"></select>
+      <div class="bubble" id="bubble" style="margin-top:12px"></div>
+      <p class="note" id="len"></p>
+    </div>
+  </div>
+</section>
+
+<section id="p-lich" class="hide">
+  <div class="card">
+    <h2>Tạo lịch gửi</h2>
+    <div class="grid">
+      <div><label for="grp">Gửi cho nhóm</label><select id="grp"></select></div>
+      <div><label for="when">Thời gian gửi</label><input type="datetime-local" id="when"></div>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <button class="btn" id="mkJob">Lên lịch</button>
+      <button class="btn ghost" id="sendNow">Gửi ngay (mô phỏng)</button>
+      <span id="jobMsg" class="note"></span>
+    </div>
+    <p class="note">Lịch chạy khi trang này đang mở. Để gửi tự động cả khi tắt máy cần một máy chủ chạy nền, em sẽ thêm khi kết nối Zalo OA.</p>
+  </div>
+  <div class="card"><h2>Các lịch đã tạo</h2>
+    <div class="tbl"><table><thead><tr><th>Thời gian</th><th>Nhóm</th><th>Số khách</th><th>Trạng thái</th><th></th></tr></thead><tbody id="jobBody"></tbody></table></div>
+    <p id="jobEmpty" class="note hide">Chưa có lịch nào. Chọn nhóm và thời gian ở phía trên rồi bấm Lên lịch.</p></div>
+</section>
+
+<section id="p-nhatky" class="hide">
+  <div class="card">
+    <div class="row" style="justify-content:space-between"><h2>Nhật ký gửi tin</h2>
+      <div class="row"><button class="btn ghost" id="exp">Tải CSV</button><button class="btn danger" id="clrLog">Xóa nhật ký</button></div></div>
+    <div class="tbl"><table><thead><tr><th>Giờ</th><th>Khách</th><th>Số</th><th>Trạng thái</th></tr></thead><tbody id="logBody"></tbody></table></div>
+    <p id="logEmpty" class="note hide">Chưa gửi tin nào.</p>
+  </div>
+</section>
+
+<section id="p-cd" class="hide">
+  <div class="card">
+    <h2>Kết nối Zalo OA (điền sau)</h2>
+    <div class="grid">
+      <div><label for="oa">Tên Zalo OA</label><input id="oa" placeholder="Chưa có"></div>
+      <div><label for="tid">Mã mẫu tin (Template ID)</label><input id="tid" placeholder="Sau khi Zalo duyệt"></div>
+      <div><label for="oal">Link quan tâm OA</label><input id="oal" placeholder="https://zalo.me/..."></div>
+      <div><label for="myp">Số Zalo cá nhân của anh</label><input id="myp" placeholder="09xxxxxxxx"></div>
+    </div>
+    <p class="note">Khóa API (App ID, Secret, Access Token) không nhập ở trang này. Khi có OA, các khóa đó sẽ nằm trên máy chủ để không bị lộ.</p>
+    <div class="row"><button class="btn" id="saveCfg">Lưu cài đặt</button><span id="cfgMsg" class="note"></span></div>
+  </div>
+</section>
+</div>
+
+<script>
+(function(){
+var KEY="zalo_gui_tin_v1";
+var S={cust:[],tpl:"Kính gửi {ten}, bên em xin cập nhật thông tin hệ thống của anh/chị ({ghichu}). Cần hỗ trợ anh/chị vui lòng liên hệ lại số này ạ.",jobs:[],log:[],cfg:{}};
+try{var raw=localStorage.getItem(KEY);if(raw){var o=JSON.parse(raw);for(var k in o)S[k]=o[k];}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+function normPhone(p){var d=String(p||"").replace(/[^\d+]/g,"");if(d.indexOf("+84")===0)d="0"+d.slice(3);else if(d.indexOf("84")===0&&d.length===11)d="0"+d.slice(2);return d;}
+function validPhone(p){return /^0\d{9}$/.test(p);}
+function fmt(d){var x=new Date(d);return x.toLocaleString("vi-VN",{hour12:false,day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});}
+
+/* tabs */
+var tabs=["kh","soan","lich","nhatky","cd"];
+function show(t){tabs.forEach(function(x){$("p-"+x).classList.toggle("hide",x!==t);});
+ document.querySelectorAll("#tabs button").forEach(function(b){b.setAttribute("aria-selected",b.dataset.t===t);});
+ if(t==="soan")renderSoan();if(t==="lich")renderLich();if(t==="nhatky")renderLog();}
+$("tabs").addEventListener("click",function(e){if(e.target.dataset.t)show(e.target.dataset.t);});
+
+/* khách hàng */
+function parse(text){
+ var lines=text.split(/\r?\n/).filter(function(l){return l.trim();});
+ var add=0,bad=0,dup=0;
+ lines.forEach(function(l,i){
+  var d=l.indexOf("\t")>-1?"\t":(l.indexOf(";")>-1?";":",");
+  var c=l.split(d).map(function(x){return x.trim().replace(/^"|"$/g,"");});
+  var p=normPhone(c[1]);
+  if(!validPhone(p)){if(i>0||/\d{9}/.test(l))bad++;return;}
+  if(S.cust.some(function(x){return x.sdt===p;})){dup++;return;}
+  S.cust.push({id:uid(),ten:c[0]||"Quý khách",sdt:p,nhom:c[2]||"Chưa phân nhóm",ghichu:c[3]||""});add++;
+ });
+ save();renderKh();
+ $("impMsg").textContent="Đã thêm "+add+" khách"+(dup?", bỏ "+dup+" số trùng":"")+(bad?", "+bad+" dòng sai số điện thoại":"")+".";
+}
+$("addPaste").onclick=function(){parse($("paste").value);$("paste").value="";};
+$("file").onchange=function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(){parse(String(r.result));};r.readAsText(f,"utf-8");e.target.value="";};
+$("search").oninput=renderKh;
+$("clearAll").onclick=function(){if(S.cust.length&&confirm("Xóa toàn bộ "+S.cust.length+" khách?")){S.cust=[];save();renderKh();}};
+$("khBody").onclick=function(e){var id=e.target.dataset.del;if(id){S.cust=S.cust.filter(function(c){return c.id!==id;});save();renderKh();}};
+function renderKh(){
+ var q=$("search").value.trim().toLowerCase();
+ var list=S.cust.filter(function(c){return !q||(c.ten+" "+c.sdt).toLowerCase().indexOf(q)>-1;});
+ $("khTitle").textContent="Danh sách khách ("+S.cust.length+")";
+ $("khEmpty").classList.toggle("hide",S.cust.length>0);
+ $("khBody").innerHTML=list.slice(0,300).map(function(c){return "<tr><td>"+esc(c.ten)+"</td><td>"+esc(c.sdt)+"</td><td>"+esc(c.nhom)+"</td><td>"+esc(c.ghichu)+"</td><td><button class='btn danger' data-del='"+c.id+"'>Xóa</button></td></tr>";}).join("");
+}
+
+/* soạn tin */
+var VARS=[["ten","Tên"],["sdt","Số điện thoại"],["nhom","Nhóm"],["ghichu","Ghi chú"]];
+function render(t,c){return t.replace(/\{(\w+)\}/g,function(m,k){return c&&c[k]!=null&&c[k]!==""?c[k]:(c?"":m);});}
+function renderSoan(){
+ $("vars").innerHTML=VARS.map(function(v){return "<button class='chip' data-v='"+v[0]+"'>{"+v[0]+"} "+v[1]+"</button>";}).join("");
+ $("tpl").value=S.tpl;
+ var cur=$("pv").value;
+ $("pv").innerHTML=S.cust.length?S.cust.slice(0,100).map(function(c){return "<option value='"+c.id+"'>"+esc(c.ten)+" - "+esc(c.sdt)+"</option>";}).join(""):"<option value=''>Chưa có khách, dùng dữ liệu mẫu</option>";
+ if(cur)$("pv").value=cur;
+ prev();
+}
+function prev(){
+ var c=S.cust.filter(function(x){return x.id===$("pv").value;})[0]||{ten:"Nguyễn Văn A",sdt:"0901234567",nhom:"Mẫu",ghichu:"hệ 10kWp"};
+ var m=render($("tpl").value,c);$("bubble").textContent=m;$("len").textContent=m.length+" ký tự";
+}
+$("tpl").oninput=function(){S.tpl=$("tpl").value;save();prev();};
+$("pv").onchange=prev;
+$("vars").onclick=function(e){var v=e.target.dataset.v;if(!v)return;var t=$("tpl"),s=t.selectionStart||t.value.length;t.value=t.value.slice(0,s)+"{"+v+"}"+t.value.slice(s);S.tpl=t.value;save();prev();t.focus();};
+
+/* lịch gửi */
+function groups(){var g={};S.cust.forEach(function(c){g[c.nhom]=(g[c.nhom]||0)+1;});return g;}
+function recips(g){return S.cust.filter(function(c){return g==="__all"||c.nhom===g;});}
+function renderLich(){
+ var g=groups(),h="<option value='__all'>Tất cả ("+S.cust.length+")</option>";
+ Object.keys(g).forEach(function(k){h+="<option value='"+esc(k)+"'>"+esc(k)+" ("+g[k]+")</option>";});
+ var cur=$("grp").value;$("grp").innerHTML=h;if(cur)$("grp").value=cur;
+ $("jobEmpty").classList.toggle("hide",S.jobs.length>0);
+ $("jobBody").innerHTML=S.jobs.slice().reverse().map(function(j){
+  var cls=j.status==="Đã gửi"?"ok":"warn";
+  return "<tr><td>"+fmt(j.time)+"</td><td>"+esc(j.nhom==="__all"?"Tất cả":j.nhom)+"</td><td>"+j.ids.length+"</td><td class='"+cls+"'>"+j.status+"</td><td>"+(j.status==="Chờ gửi"?"<button class='btn danger' data-cancel='"+j.id+"'>Hủy</button>":"")+"</td></tr>";}).join("");
+}
+function runJob(j){
+ var tp=S.tpl,t=Date.now();
+ j.ids.forEach(function(id){var c=S.cust.filter(function(x){return x.id===id;})[0];if(!c)return;
+  S.log.push({t:t,ten:c.ten,sdt:c.sdt,msg:render(tp,c),st:"Đã gửi (mô phỏng)"});});
+ if(S.log.length>2000)S.log=S.log.slice(-2000);
+ j.status="Đã gửi";save();
+}
+$("mkJob").onclick=function(){
+ var g=$("grp").value,w=$("when").value,r=recips(g);
+ if(!r.length){$("jobMsg").textContent="Chưa có khách trong nhóm này.";return;}
+ if(!w){$("jobMsg").textContent="Chọn thời gian gửi.";return;}
+ S.jobs.push({id:uid(),time:new Date(w).getTime(),nhom:g,ids:r.map(function(c){return c.id;}),status:"Chờ gửi"});
+ save();renderLich();$("jobMsg").textContent="Đã lên lịch cho "+r.length+" khách.";
+};
+$("sendNow").onclick=function(){
+ var r=recips($("grp").value);if(!r.length){$("jobMsg").textContent="Chưa có khách trong nhóm này.";return;}
+ var j={id:uid(),time:Date.now(),nhom:$("grp").value,ids:r.map(function(c){return c.id;}),status:"Chờ gửi"};
+ S.jobs.push(j);runJob(j);renderLich();$("jobMsg").textContent="Đã gửi mô phỏng "+r.length+" tin, xem ở tab Nhật ký.";
+};
+$("jobBody").onclick=function(e){var id=e.target.dataset.cancel;if(id){S.jobs=S.jobs.filter(function(j){return j.id!==id;});save();renderLich();}};
+setInterval(function(){var ch=false,n=Date.now();S.jobs.forEach(function(j){if(j.status==="Chờ gửi"&&j.time<=n){runJob(j);ch=true;}});if(ch&&!$("p-lich").classList.contains("hide"))renderLich();if(ch&&!$("p-nhatky").classList.contains("hide"))renderLog();},15000);
+
+/* nhật ký */
+function renderLog(){
+ $("logEmpty").classList.toggle("hide",S.log.length>0);
+ $("logBody").innerHTML=S.log.slice(-200).reverse().map(function(l){return "<tr><td>"+fmt(l.t)+"</td><td>"+esc(l.ten)+"</td><td>"+esc(l.sdt)+"</td><td class='ok'>"+esc(l.st)+"</td></tr>";}).join("");
+}
+$("clrLog").onclick=function(){if(S.log.length&&confirm("Xóa nhật ký?")){S.log=[];save();renderLog();}};
+$("exp").onclick=function(){
+ if(!S.log.length)return;
+ var rows=[["Giờ","Tên","Số","Nội dung","Trạng thái"]].concat(S.log.map(function(l){return [fmt(l.t),l.ten,l.sdt,l.msg,l.st];}));
+ var csv="\ufeff"+rows.map(function(r){return r.map(function(x){return '"'+String(x).replace(/"/g,'""')+'"';}).join(",");}).join("\r\n");
+ try{var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));a.download="nhat-ky-zalo.csv";a.click();}catch(e){}
+};
+
+/* cài đặt */
+["oa","tid","oal","myp"].forEach(function(k){$(k).value=(S.cfg||{})[k]||"";});
+$("saveCfg").onclick=function(){S.cfg={};["oa","tid","oal","myp"].forEach(function(k){S.cfg[k]=$(k).value.trim();});save();$("cfgMsg").textContent="Đã lưu.";};
+
+renderKh();
+})();
+</script>
+</body>
+</html>
