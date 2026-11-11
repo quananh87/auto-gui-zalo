@@ -1,266 +1,132 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-<meta charset="utf-8">
+<!DOCTYPE html><html lang="vi"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Gửi tin Zalo cho khách hàng</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E💬%3C/text%3E%3C/svg%3E">
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:,">
 <style>
-:root{--bg:#f3f6fb;--panel:#fff;--ink:#14213d;--mute:#5b6882;--line:#dbe3f0;--brand:#0068ff;--brand-ink:#fff;--ok:#12805c;--warn:#b45309;--bad:#c0392b;--chip:#e8f0ff;
-box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1626;--panel:#16213a;--ink:#e7edf9;--mute:#9aa8c4;--line:#2a3857;--brand:#4d94ff;--brand-ink:#04122b;--ok:#4cc79a;--warn:#f0a94a;--bad:#ff7b6b;--chip:#1d2f55;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#0e1626;--panel:#16213a;--ink:#e7edf9;--mute:#9aa8c4;--line:#2a3857;--brand:#4d94ff;--brand-ink:#04122b;--ok:#4cc79a;--warn:#f0a94a;--bad:#ff7b6b;--chip:#1d2f55;color-scheme:dark}
-*{box-sizing:border-box}
+:root{--bg:#f4f7fb;--cd:#fff;--tx:#1b2430;--mu:#66738a;--bd:#dde3ec;--pr:#0068ff;--ok:#12a150;--wa:#b86e00;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10151c;--cd:#19212b;--tx:#e7edf5;--mu:#93a1b5;--bd:#2a3543;--pr:#4d94ff;--ok:#3fcf86;--wa:#e8a63a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#10151c;--cd:#19212b;--tx:#e7edf5;--mu:#93a1b5;--bd:#2a3543;--pr:#4d94ff;--ok:#3fcf86;--wa:#e8a63a;color-scheme:dark}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 "Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-.wrap{max-width:1000px;margin:0 auto;padding:16px}
-header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
-h1{font-size:20px;margin:0;font-weight:700}
-.sim{background:var(--chip);color:var(--brand);padding:4px 10px;border-radius:99px;font-size:13px;font-weight:500}
-nav{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:16px;overflow-x:auto}
-nav button{background:none;border:0;border-bottom:3px solid transparent;color:var(--mute);padding:10px 14px;font:inherit;font-weight:500;cursor:pointer;white-space:nowrap}
-nav button[aria-selected="true"]{color:var(--brand);border-color:var(--brand)}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:16px}
-h2{font-size:16px;margin:0 0 10px}
-label{display:block;font-weight:500;margin:10px 0 4px}
-input,textarea,select{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px 10px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:920px;margin:0 auto;padding:16px}
+h1{font-size:20px;margin:4px 0}
+.sub{color:var(--mu);font-size:13px;margin:0 0 12px}
+nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+nav button{flex:1;min-width:110px}
+button,.btn{font:inherit;border:1px solid var(--bd);background:var(--cd);color:var(--tx);padding:8px 12px;border-radius:8px;cursor:pointer}
+button.on,button.p{background:var(--pr);border-color:var(--pr);color:#fff}
+button.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+button.s{padding:4px 8px;font-size:13px}
+.card{background:var(--cd);border:1px solid var(--bd);border-radius:12px;padding:14px;margin-bottom:12px}
+textarea,input,select{font:inherit;width:100%;padding:8px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx)}
 textarea{min-height:110px;resize:vertical}
-:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
-.btn{background:var(--brand);color:var(--brand-ink);border:0;border-radius:6px;padding:9px 16px;font:inherit;font-weight:500;cursor:pointer}
-.btn.ghost{background:transparent;color:var(--brand);border:1px solid var(--brand)}
-.btn.danger{background:transparent;color:var(--bad);border:1px solid var(--bad)}
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-@media(max-width:760px){.grid{grid-template-columns:1fr}}
-.tbl{overflow-x:auto}
-table{border-collapse:collapse;width:100%;min-width:520px}
-th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
-th{color:var(--mute);font-weight:500;font-size:13px}
-.note{color:var(--mute);font-size:13px}
-.chip{display:inline-block;background:var(--chip);color:var(--brand);border-radius:99px;padding:1px 9px;font-size:12px;cursor:pointer;margin:2px 4px 2px 0;border:0;font-family:inherit}
-.bubble{background:var(--chip);border-radius:12px 12px 12px 2px;padding:12px 14px;white-space:pre-wrap;max-width:420px}
-.ok{color:var(--ok)}.warn{color:var(--warn)}.bad{color:var(--bad)}
-.hide{display:none}
-</style>
-</head>
-<body>
-<div class="wrap">
-<header>
-  <h1>Gửi tin Zalo cho khách hàng</h1>
-  <span class="sim">Chế độ mô phỏng: chưa kết nối Zalo OA</span>
-</header>
-<nav role="tablist" id="tabs">
-  <button role="tab" data-t="kh" aria-selected="true">Khách hàng</button>
-  <button role="tab" data-t="soan" aria-selected="false">Soạn tin</button>
-  <button role="tab" data-t="lich" aria-selected="false">Lịch gửi</button>
-  <button role="tab" data-t="nhatky" aria-selected="false">Nhật ký</button>
-  <button role="tab" data-t="cd" aria-selected="false">Cài đặt</button>
-</nav>
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
+.row>input{flex:1;min-width:140px}
+.mu{color:var(--mu);font-size:13px}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:7px 6px;border-bottom:1px solid var(--bd);white-space:nowrap}
+td.w{white-space:normal}
+.b{display:inline-block;padding:1px 8px;border-radius:99px;font-size:12px;border:1px solid var(--bd)}
+.b.sent{color:var(--ok);border-color:var(--ok)}.b.pending{color:var(--wa);border-color:var(--wa)}
+.msg{background:var(--bg);border:1px dashed var(--bd);border-radius:8px;padding:8px;white-space:pre-wrap;font-size:14px;margin:6px 0}
+.q{border-bottom:1px solid var(--bd);padding:10px 0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
+.stat{background:var(--bg);border-radius:10px;padding:10px;text-align:center}.stat b{display:block;font-size:24px}
+.alert{background:var(--wa);color:#fff;padding:10px 12px;border-radius:10px;margin-bottom:12px;display:none}
+section{display:none}section.on{display:block}
+.chip{padding:3px 9px;font-size:13px;border-radius:99px}
+</style></head><body><main>
+<h1>Gửi tin Zalo cho khách hàng</h1>
+<p class="sub">Nhập danh sách khách, soạn tin mẫu, hẹn giờ và gửi từng khách chỉ với một chạm.</p>
+<div class="alert" id="al"></div>
+<nav id="nav"><button data-t="t1" class="on">1. Khách hàng</button><button data-t="t2">2. Soạn tin</button><button data-t="t3">3. Gửi &amp; hẹn giờ</button><button data-t="t4">4. Báo cáo</button></nav>
 
-<section id="p-kh">
-  <div class="card">
-    <h2>Nhập danh sách khách</h2>
-    <p class="note">Dán từ Excel hoặc CSV, mỗi dòng một khách theo thứ tự: Tên, Số điện thoại, Nhóm, Ghi chú. Dòng tiêu đề sẽ tự bỏ qua.</p>
-    <textarea id="paste" placeholder="Nguyễn Văn A	0901234567	Khách 2024	Hệ 10kWp"></textarea>
-    <div class="row" style="margin-top:10px">
-      <button class="btn" id="addPaste">Thêm vào danh sách</button>
-      <input type="file" id="file" accept=".csv,.txt,.tsv" style="width:auto">
-      <span id="impMsg" class="note"></span>
-    </div>
-  </div>
-  <div class="card">
-    <div class="row" style="justify-content:space-between"><h2 id="khTitle">Danh sách khách</h2>
-      <div class="row"><input id="search" placeholder="Tìm tên hoặc số" style="width:200px"><button class="btn danger" id="clearAll">Xóa tất cả</button></div></div>
-    <div class="tbl"><table><thead><tr><th>Tên</th><th>Số Zalo</th><th>Nhóm</th><th>Ghi chú</th><th></th></tr></thead><tbody id="khBody"></tbody></table></div>
-    <p id="khEmpty" class="note hide">Chưa có khách nào. Dán danh sách ở phía trên để bắt đầu.</p>
-  </div>
-</section>
+<section id="t1" class="on"><div class="card">
+<b>Nhập danh sách khách</b>
+<p class="mu">Dán từ Excel/Zalo hoặc chọn file CSV. Mỗi dòng: Tên, Số điện thoại, Ghi chú, Nhóm (ngăn cách bằng tab, dấu phẩy hoặc chấm phẩy).</p>
+<textarea id="imp" placeholder="Nguyễn Văn A, 0901234567, lắp 5kWp, Củ Chi&#10;Trần Thị B, 0912345678"></textarea>
+<div class="row"><button class="p" id="bimp">Thêm vào danh sách</button><input type="file" id="fcsv" accept=".csv,.txt" style="max-width:240px"><span class="mu" id="impm"></span></div></div>
+<div class="card"><div class="row"><input id="q" placeholder="Tìm tên / SĐT / ghi chú / nhóm…"><select id="grp" style="max-width:160px"></select><select id="st" style="max-width:140px"><option value="">Mọi trạng thái</option><option value="pending">Chưa gửi</option><option value="sent">Đã gửi</option></select></div><div class="row"><button class="p" id="bflt">Chọn đúng danh sách đang lọc</button><button id="ball">Chọn tất cả</button><button id="bnone">Bỏ chọn</button><button id="bdel">Xoá đã chọn</button></div>
+<div class="mu" id="cnt"></div><div class="tw"><table id="tb"></table></div></div></section>
 
-<section id="p-soan" class="hide">
-  <div class="grid">
-    <div class="card">
-      <h2>Mẫu tin nhắn</h2>
-      <label for="tpl">Nội dung (bấm biến để chèn)</label>
-      <div id="vars"></div>
-      <textarea id="tpl"></textarea>
-      <p class="note">Với ZNS, nội dung phải trùng mẫu Zalo đã duyệt. Biến ở đây sẽ ứng với tham số của mẫu đó.</p>
-    </div>
-    <div class="card">
-      <h2>Xem trước</h2>
-      <label for="pv">Xem với khách</label>
-      <select id="pv"></select>
-      <div class="bubble" id="bubble" style="margin-top:12px"></div>
-      <p class="note" id="len"></p>
-    </div>
-  </div>
-</section>
+<section id="t2"><div class="card"><b>Nội dung tin nhắn mẫu</b>
+<p class="mu">Bấm để chèn biến: tên, số điện thoại, ghi chú, nhóm của từng khách.</p>
+<div class="row"><button class="chip" data-v="{ten}">{ten}</button><button class="chip" data-v="{sdt}">{sdt}</button><button class="chip" data-v="{ghichu}">{ghichu}</button><button class="chip" data-v="{nhom}">{nhom}</button></div>
+<textarea id="tpl" style="min-height:160px"></textarea><p class="mu">Chữ ký cuối tin (tự thêm vào mọi tin):</p><input id="sig"><p class="mu">Bài viết mẫu đã lưu:</p><div class="row"><select id="tsel" style="flex:1"></select><button id="tload">Dùng bài này</button><button id="tdel">Xoá</button></div><div class="row"><input id="tname" placeholder="Đặt tên bài mẫu…"><button class="p" id="tsave">Lưu bài hiện tại</button></div>
+<p class="mu">Xem trước với khách đầu tiên:</p><div class="msg" id="prev"></div></div></section>
 
-<section id="p-lich" class="hide">
-  <div class="card">
-    <h2>Tạo lịch gửi</h2>
-    <div class="grid">
-      <div><label for="grp">Gửi cho nhóm</label><select id="grp"></select></div>
-      <div><label for="when">Thời gian gửi</label><input type="datetime-local" id="when"></div>
-    </div>
-    <div class="row" style="margin-top:12px">
-      <button class="btn" id="mkJob">Lên lịch</button>
-      <button class="btn ghost" id="sendNow">Gửi ngay (mô phỏng)</button>
-      <span id="jobMsg" class="note"></span>
-    </div>
-    <p class="note">Lịch chạy khi trang này đang mở. Để gửi tự động cả khi tắt máy cần một máy chủ chạy nền, em sẽ thêm khi kết nối Zalo OA.</p>
-  </div>
-  <div class="card"><h2>Các lịch đã tạo</h2>
-    <div class="tbl"><table><thead><tr><th>Thời gian</th><th>Nhóm</th><th>Số khách</th><th>Trạng thái</th><th></th></tr></thead><tbody id="jobBody"></tbody></table></div>
-    <p id="jobEmpty" class="note hide">Chưa có lịch nào. Chọn nhóm và thời gian ở phía trên rồi bấm Lên lịch.</p></div>
-</section>
+<section id="t3"><div class="card"><b>Hẹn giờ nhắc gửi</b>
+<p class="mu">Trình duyệt sẽ nhắc đúng giờ khi trang này đang mở. Mỗi tin vẫn được gửi bằng một chạm trên Zalo.</p>
+<div class="row"><input type="datetime-local" id="sch" style="max-width:240px"><button id="bsch">Đặt giờ</button><button id="bclr">Xoá hẹn</button></div><div class="mu" id="schm"></div></div>
+<div class="card"><div class="row"><b>Hàng đợi gửi</b><label class="mu">Số khách mỗi đợt <input type="number" id="nb" min="1" max="500" style="width:80px"></label><span class="mu" id="qm"></span></div><div id="queue"></div></div></section>
 
-<section id="p-nhatky" class="hide">
-  <div class="card">
-    <div class="row" style="justify-content:space-between"><h2>Nhật ký gửi tin</h2>
-      <div class="row"><button class="btn ghost" id="exp">Tải CSV</button><button class="btn danger" id="clrLog">Xóa nhật ký</button></div></div>
-    <div class="tbl"><table><thead><tr><th>Giờ</th><th>Khách</th><th>Số</th><th>Trạng thái</th></tr></thead><tbody id="logBody"></tbody></table></div>
-    <p id="logEmpty" class="note hide">Chưa gửi tin nào.</p>
-  </div>
-</section>
-
-<section id="p-cd" class="hide">
-  <div class="card">
-    <h2>Kết nối Zalo OA (điền sau)</h2>
-    <div class="grid">
-      <div><label for="oa">Tên Zalo OA</label><input id="oa" placeholder="Chưa có"></div>
-      <div><label for="tid">Mã mẫu tin (Template ID)</label><input id="tid" placeholder="Sau khi Zalo duyệt"></div>
-      <div><label for="oal">Link quan tâm OA</label><input id="oal" placeholder="https://zalo.me/..."></div>
-      <div><label for="myp">Số Zalo cá nhân của anh</label><input id="myp" placeholder="09xxxxxxxx"></div>
-    </div>
-    <p class="note">Khóa API (App ID, Secret, Access Token) không nhập ở trang này. Khi có OA, các khóa đó sẽ nằm trên máy chủ để không bị lộ.</p>
-    <div class="row"><button class="btn" id="saveCfg">Lưu cài đặt</button><span id="cfgMsg" class="note"></span></div>
-  </div>
-</section>
-</div>
-
+<section id="t4"><div class="card"><div class="stats" id="stats"></div>
+<div class="row"><button id="bcopy">Sao chép báo cáo (CSV)</button><button id="breset">Đặt lại trạng thái</button><span class="mu" id="rm"></span></div></div></section>
+</main>
 <script>
-(function(){
-var KEY="zalo_gui_tin_v1";
-var SEED=[["Nguyen Minh Thế","0982688608","An Giang",""],["Ngọc Thịnh","0988211191","An Giang",""],["Nhàn Nttek","0971070729","An Giang","Data ấm"],["Trọng Doanh","0342568486","An Giang",""],["Bé","0916417239","Bà Rịa - Vũng Tàu",""],["Cửa Hàng Điện Nước Quang Phát","0969550099","Bà Rịa - Vũng Tàu",""],["Huỳnh Phi","0848177377","Bà Rịa - Vũng Tàu",""],["Nguyễn Ngọc Nguyên","0704998696","Bà Rịa - Vũng Tàu",""],["Nguyễn Văn Phước","0937092998","Bà Rịa - Vũng Tàu",""],["Phan Khải (Hunonic)","0901194194","Bà Rịa - Vũng Tàu",""],["Trần Quốc Tuấn","0902501715","Bà Rịa - Vũng Tàu",""],["Cửa Hàng Điện Nước Hưng Phát","0907101120","Bình Dương",""],["Lê Hồ Tường Dân","0978980268","Bình Dương",""],["Lý Nhân Phú","0906788778","Bình Dương","Data Nóng"],["Nguyễn Quốc Huy","0907887999","Bình Dương",""],["Phú Nội Thất","0937561214","Bình Dương",""],["Giang Nguyễn","0857691313","Bình Phước",""],["Huy Phát (zalo Phong Nguyen)","0933899799","Bình Thuận",""],["Ngân Tihana","0933008896","Bình Thuận",""],["Phạm Duy Tuệ","0792396100","Bình Thuận",""],["Trương Ngọc Quang","0392493649","Bình Thuận",""],["Trịnh Hồng Quân","0947323509","Bạc Liêu","Data ấm"],["Trịnh Thanh Toàn","0943555154","Bạc Liêu","Từ chối"],["Trung Tâm Thiết Bị Điện Gia Nghi","0907147584","Bến Tre",""],["Xdung st decor","0931852638","Bến Tre",""],["Trương Thanh Thoảng","0916075579","Cà Mau","Chưa đánh giá được"],["Đồ Gỗ Ngọc Thư","0913094040","Cà Mau","Chưa đánh giá được"],["A Chánh","0939507838","Cần Thơ","Chưa đánh giá được"],["Delta smart","0898464886","Cần Thơ",""],["Duy Nguyễn Hoàng","0939148941","Cần Thơ",""],["Nguyễn Hào Kiệt","0907777626","Cần Thơ","Từ chối"],["Pmi Sga Cần Thơ","0919707034","Cần Thơ",""],["Nguyễn Đình Tâm","0384243747","Hậu Giang",""],["Quý khách","0903992694","Hồ Chí Minh",""],["Quý khách","0918393093","Hồ Chí Minh",""],["Quý khách","0908535353","Hồ Chí Minh",""],["Quý khách","0909616909","Hồ Chí Minh",""],["8matter","0964656222","Hồ Chí Minh",""],["8matter smarthome","0962930369","Hồ Chí Minh",""],["A Lam","0949324139","Hồ Chí Minh",""],["An Ninh tech vn","0964466552","Hồ Chí Minh",""],["Anh Tuấn","0903700385","Hồ Chí Minh","Data ấm"],["Anna Thuỷ","0983168494","Hồ Chí Minh",""],["Bích","0938658146","Hồ Chí Minh",""],["CAMERA LƯU GIA","0964558247","Hồ Chí Minh",""],["Camera Lưu Phúc","0913603637","Hồ Chí Minh",""],["Camera Phú Thịnh","0937265268","Hồ Chí Minh",""],["Camera SURETECH","0978515159","Hồ Chí Minh",""],["Camera Tiến Thành","0938025141","Hồ Chí Minh",""],["Camera Trường Thạnh","0918006239","Hồ Chí Minh",""],["Camera Viễn thông","0989865766","Hồ Chí Minh",""],["Camera lắp đặt tận nơi","0931489333","Hồ Chí Minh",""],["Camera sg","0938125820","Hồ Chí Minh",""],["Camera, năng lượng mặt trời - PHÚ GIA CÁT","0919547338","Hồ Chí Minh",""],["Chung Nguyễn","0902909618","Hồ Chí Minh","Data ấm"],["Chánh Korler","0914498498","Hồ Chí Minh",""],["Chình Smartliving","0987000162","Hồ Chí Minh",""],["Cty TNHH Hải Phi","0903847513","Hồ Chí Minh",""],["Cty Viễn Thông Công Nghệ Xanh","0988996078","Hồ Chí Minh",""],["Cty cp viễn thông sg new","0908742769","Hồ Chí Minh",""],["Cty tnhh Việt Hưng","0969898941","Hồ Chí Minh",""],["Cty tnhh cn viễn thông thành đạt","0908560004","Hồ Chí Minh",""],["Cty tnhh công nghệ Hoàng Nguyên","0935210565","Hồ Chí Minh",""],["Cty tnhh công nghệ đông kim","0987247073","Hồ Chí Minh",""],["Cty tnhh giải pháp camera sht","0797897933","Hồ Chí Minh",""],["Cty tnhh ibs group vn","0938619709","Hồ Chí Minh",""],["Cty tnhh phát triển công nghệ metsuki vn","0913770579","Hồ Chí Minh",""],["Cty tnhh thiết bị điện đại thắng","0989002365","Hồ Chí Minh",""],["Cty tnhh thương mại dịch vụ hoàng huy vũ","0983327977","Hồ Chí Minh",""],["Cty tnhh tm dv tin học hoàng kim phát","0977610388","Hồ Chí Minh",""],["Cty tnhh tm kỹ thuật bách khoa","0935212117","Hồ Chí Minh",""],["Cty tnhh tm logico","0909636798","Hồ Chí Minh",""],["Cty tnhh tmdv Cường Thịnh","0903319145","Hồ Chí Minh",""],["Cty tnhh tmdv camera","0903060333","Hồ Chí Minh",""],["Cty tnhh tmdv cntt phương linh","0909526633","Hồ Chí Minh",""],["Cty tnhh tmdv công nghệ citytech","0977072846","Hồ Chí Minh",""],["Cty tnhh tư vấn giải pháp An Việt","0932672797","Hồ Chí Minh",""],["Cty tnhh xdung thiết kế vinicon","0968967161","Hồ Chí Minh",""],["Cty tnhh điện thông minh Quang Minh","0932333411","Hồ Chí Minh",""],["Cty viễn thông Tầm Nhìn Mới","0989737355","Hồ Chí Minh",""],["Cty xuất nhập khẩu Đại Vũ","0937883080","Hồ Chí Minh",""],["Cô Hương","0903623311","Hồ Chí Minh","Data ấm"],["Cô Hồng","0938446436","Hồ Chí Minh","Data ấm"],["Công Ty Cổ Phần Giải Trí AZKTV","0932662868","Hồ Chí Minh",""],["Công Ty TNHH An Ninh Phát Triển Toàn Cầu Mới","0939901567","Hồ Chí Minh",""],["Công Ty TNHH Công Nghệ Bình Minh Việt","0963897332","Hồ Chí Minh",""],["Công Ty TNHH Công Nghệ Viễn Thông Khải Minh","0906931003","Hồ Chí Minh",""],["Công Ty TNHH Dochi Home","0937621868","Hồ Chí Minh",""],["Công Ty TNHH Pominatech Việt Nam","0815001508","Hồ Chí Minh",""],["Công Ty TNHH TAHOUSE","0819696996","Hồ Chí Minh",""],["Công Ty TNHH Xây Dựng Saigon Building","0944823379","Hồ Chí Minh",""],["Công Ty TNHH Điện Phan Gia","0763322922","Hồ Chí Minh",""],["Công ty Kỹ thuật Xây dựng MINITECH","0903141069","Hồ Chí Minh",""],["Công ty TNHH Thiết Bị Điện Trí Cương","0908504886","Hồ Chí Minh",""],["Công ty Thiết bị điện Nhật Tiến","0916227778","Hồ Chí Minh",""],["Công ty Thiết kế và xây dựng DNC","0908652829","Hồ Chí Minh",""],["Công ty Xây dựng Hoàng Hưng Phát","0938236106","Hồ Chí Minh",""],["Cơ Điện Phòng Cháy Chữa Cháy Đặng Gia Bảo","0909822766","Hồ Chí Minh",""],["Cường","0917631416","Hồ Chí Minh","Lạnh"],["Cẩm Hào","0919101060","Hồ Chí Minh",""],["Cửa Hàng Thiết Bị Điện Nước NGUYỄN","0937798008","Hồ Chí Minh",""],["Cửa cuốn Namviet 247","0855781678","Hồ Chí Minh",""],["Cửa hàng Nội thất Mộc Lâm","0938792345","Hồ Chí Minh",""],["Cửa hàng lê nguyễn technology","0909367688","Hồ Chí Minh",""],["Cửa hàng điện nước q12","0765633775","Hồ Chí Minh",""],["Hiếu Phạm Trọng","0916483554","Hồ Chí Minh",""],["Hoang Nguyen Nhat","0942234234","Hồ Chí Minh","Chưa đánh giá được"],["Hoàng Thắng","0961220939","Hồ Chí Minh","Chưa đánh giá được"],["Huynh Thien Van","0986436678","Hồ Chí Minh","Chưa đánh giá được"],["Huỳnh","0775670035","Hồ Chí Minh",""],["Hồ Văn Mãi","0339070809","Hồ Chí Minh",""],["Kho thiết bị điện cao cấp Tali","0909800859","Hồ Chí Minh",""],["Kim Ánh","0976573207","Hồ Chí Minh",""],["Kiến Trúc Xây Dựng NEOHOUSE","0906100202","Hồ Chí Minh",""],["Kiến trúc THAD (Thadco)","0903762060","Hồ Chí Minh",""],["Long Vũ","0563399219","Hồ Chí Minh","Chưa đánh giá được"],["Lê Quốc Việt","0919952607","Hồ Chí Minh",""],["Lê Đinh Ngọc","0986540456","Hồ Chí Minh",""],["Lắp Camera 24H - Tầm Nhìn Mới","0933900958","Hồ Chí Minh",""],["Mekong Maynenkhi","0903353733","Hồ Chí Minh","Chưa đánh giá được"],["Metaking","0977478466","Hồ Chí Minh",""],["Minh Nhật","0909383404","Hồ Chí Minh","Chưa đánh giá được"],["Mr Linh","0908099114","Hồ Chí Minh","Chưa đánh giá được"],["Mr.huy","0984993999","Hồ Chí Minh",""],["Mạnh Hùng","0908963383","Hồ Chí Minh",""],["NPP T-HOME, Quang Tien","0939104934","Hồ Chí Minh",""],["Nguyen Duc Chanh","0705921767","Hồ Chí Minh","Data ấm"],["Nguyễn Duy Dy","0909372234","Hồ Chí Minh",""],["Nguyễn Hoàng Vũ","0784172133","Hồ Chí Minh",""],["Nguyễn Hồng Vân","0917554018","Hồ Chí Minh",""],["Nguyễn Như Tâm","0961311975","Hồ Chí Minh","Data ấm"],["Nguyễn Thanh Trúc","0937552048","Hồ Chí Minh","Chưa đánh giá được"],["Nguyễn Thủy SG","0899568139","Hồ Chí Minh",""],["Nguyễn Tiến Đạt","0939801128","Hồ Chí Minh",""],["Nguyễn Đình Thi","0586011011","Hồ Chí Minh",""],["Nhan Nguyen Thanh","0368041934","Hồ Chí Minh","Data ấm"],["Nhat Minh Smart home","0968603538","Hồ Chí Minh",""],["Nhi","0947676356","Hồ Chí Minh",""],["Nhà phân phối Hoàng Nguyễn","0932782339","Hồ Chí Minh",""],["Như Ý Solution/ cường","0946968914","Hồ Chí Minh",""],["Nội Thất Giá Sỉ HCM","0901448772","Hồ Chí Minh",""],["Nội Thất Kenli","0941936666","Hồ Chí Minh",""],["Nội Thất Không Gian Đẹp","0909840850","Hồ Chí Minh",""],["Nội Thất Mộc Tinh Hoa","0928333444","Hồ Chí Minh",""],["Nội Thất Nhà Đẹp Hoàn Mỹ","0903211046","Hồ Chí Minh",""],["Nội Thất Nhập Khẩu PTCasa","0911328333","Hồ Chí Minh",""],["Nội Thất Nhật Bản Jhome","0913707575","Hồ Chí Minh",""],["Nội Thất Trang Thành Phát","0972347339","Hồ Chí Minh",""],["Nội Thất Trẻ Việt Nam (Viet Youth)","0906139242","Hồ Chí Minh",""],["Nội Thất Đăng Phát","0938317456","Hồ Chí Minh",""],["Nội thất Bảo Nam","0935314353","Hồ Chí Minh",""],["Nội thất Cường Thịnh","0908286101","Hồ Chí Minh",""],["Nội thất Dubai","0707471079","Hồ Chí Minh",""],["Nội thất Hoàng Nam","0945448386","Hồ Chí Minh",""],["Nội thất Lộc Phát","0933695333","Hồ Chí Minh",""],["Nội thất Minh tiến","0904045225","Hồ Chí Minh",""],["Nội thất MoreDesign","0902429840","Hồ Chí Minh",""],["Nội thất Qi Concept","0906955699","Hồ Chí Minh",""],["Nội thất VIP HOMES","0902616515","Hồ Chí Minh",""],["PQSmarthome","0949393186","Hồ Chí Minh",""],["Phong","0349339766","Hồ Chí Minh",""],["Phong","0963680939","Hồ Chí Minh",""],["Phạm Sơn Tùng","0908195125","Hồ Chí Minh",""],["Quốc Du","0977030137","Hồ Chí Minh","Data ấm"],["TM & DV Harmonic Interior","0869909199","Hồ Chí Minh",""],["TPTECH LTD - CAMERA","0938222150","Hồ Chí Minh",""],["Thanh Bình Door","0905748082","Hồ Chí Minh",""],["Thanh Duy","0912420612","Hồ Chí Minh","Data ấm"],["Thiết Bị Điện & Camera - Thuý Nhi","0978676997","Hồ Chí Minh",""],["Thiết Bị Điện Hoàng Ngân","0946577887","Hồ Chí Minh",""],["Thiết Kế Xây Dựng Mẫu Nhà Đẹp Sài Gòn","0907761662","Hồ Chí Minh",""],["Thiết Kế Xây Dựng Mỹ á","0977369677","Hồ Chí Minh",""],["Thiết bị điện Bình Dương","0942008485","Hồ Chí Minh",""],["Thiết bị điện Khánh Linh","0777477051","Hồ Chí Minh",""],["Thiết bị điện Mỹ Linh","0907528797","Hồ Chí Minh",""],["Thiết bị điện Phương Anh","0908068586","Hồ Chí Minh",""],["Thầy Nhân","0913110036","Hồ Chí Minh","Data nóng"],["Thụy Nhiên","0902079841","Hồ Chí Minh","Data ấm"],["Timi Office","0944536886","Hồ Chí Minh",""],["Tiệm Điện Quý DẦN","0903626110","Hồ Chí Minh",""],["Trang Trí Nội Thất Vạn Tín Đạt","0909338398","Hồ Chí Minh",""],["Trung Tâm Thiết Bị Điện Nước Nguyễn Giang","0906679300","Hồ Chí Minh",""],["Trung Tín","0908053906","Hồ Chí Minh",""],["Trung tâm Thiết bị điện nước Nguyễn Giang","0909209300","Hồ Chí Minh",""],["Truong Tuan Viet Tien","0908495849","Hồ Chí Minh",""],["Truong van Sinh","0908203435","Hồ Chí Minh",""],["Trường Thịnh Telecom","0911287898","Hồ Chí Minh",""],["Trần Gia Hưng","0563034785","Hồ Chí Minh",""],["Tuyết","0908173979","Hồ Chí Minh","Lạnh"],["Tuấn đại lý nhỏ","0908348949","Hồ Chí Minh",""],["TÂN TIẾN DŨNG CCTV","0909008972","Hồ Chí Minh",""],["Tín Phát Electric","0906799725","Hồ Chí Minh",""],["Tú Trần","0982845213","Hồ Chí Minh",""],["VTS Việt Nam","0932828979","Hồ Chí Minh",""],["Vi tính cát an","0985985978","Hồ Chí Minh",""],["Viết Trần","0901843807","Hồ Chí Minh",""],["Viễn Thông Lộc Nam","0901084248","Hồ Chí Minh",""],["Viễn Thông Mắt Việt","0948232215","Hồ Chí Minh",""],["Vlxd Thủ Đức- Thành Danh","0909526326","Hồ Chí Minh",""],["Vũ Mạnh Khang","0932797428","Hồ Chí Minh",""],["Vũ smarthome việt","0968782425","Hồ Chí Minh",""],["Xdung Minh Thịnh Phát","0911512389","Hồ Chí Minh",""],["Xdung Song Nam","0934786914","Hồ Chí Minh",""],["Xây dựng Phố Việt","0979276777","Hồ Chí Minh",""],["cửa hàng điện nước Trương Hiền","0932199822","Hồ Chí Minh",""],["Ánh Nhật Telecom - Camera, WiFi & Điện Nhẹ","0888871999","Hồ Chí Minh",""],["Điện Nước Thắng Nguyễn","0937031123","Hồ Chí Minh",""],["Đại lý Thiết bị điện Thuận Phong","0937669981","Hồ Chí Minh",""],["Đại lý Điện Nước Trí Việt","0961778877","Hồ Chí Minh",""],["Đầu Tư Công Nghệ VinMe","0909797926","Hồ Chí Minh",""],["Đỗ Hiếu Thiện","0983626624","Hồ Chí Minh",""],["Đỗ Việt Hải","0968121727","Hồ Chí Minh",""],["Đỗ Đại Phát","0814047979","Hồ Chí Minh",""],["Lê Hoàng Phương Nam","0987070083","Kiên Giang","Data ấm"],["Lộc Phát","0939222486","Kiên Giang","Data ấm"],["Nguyễn Quốc Đạt","0919953958","Kiên Giang","Data ấm"],["Ngô Văn Triều Anh","0913832192","Kiên Giang","Từ chối"],["Trần Thanh Phụng","0988875882","Kiên Giang",""],["Minh Trung","0931252559","Long An",""],["Mắt Thần SMarthome","0902630656","Long An",""],["Ngoc Thái Camera","0865887677","Long An",""],["Thành Tín Camera","0985315439","Long An",""],["đại lý  Thuân Thiên Phát","0945675152","Long An",""],["Phấn Lê","0943032299","Sóc Trăng","Data ấm"],["Camera TG - solar TG","0938974268","Tiền Giang",""],["Newstech Tiền Giang","0837992599","Tiền Giang",""],["Đại lý Viễn Thông Nam Phát","0909223345","Tiền Giang",""],["Phạm Đoàn","0909860848","Trà Vinh","Data ấm"],["Quốc Việt","0376808765","Trà Vinh","Data ấm"],["Văn Thông Lâm","0918486004","Trà Vinh",""],["Quý khách","0562439439","Tây Ninh",""],["Quý khách","0946741368","Tây Ninh",""],["Quý khách","0975246683","Tây Ninh",""],["Quý khách","0932022497","Tây Ninh",""],["Quý khách","0888493001","Tây Ninh",""],["Quý khách","0937006136","Tây Ninh",""],["Quý khách","0919511911","Tây Ninh",""],["Quý khách","0977972237","Tây Ninh",""],["Quý khách","0966439452","Tây Ninh",""],["Quý khách","0898888250","Tây Ninh",""],["Quý khách","0857803830","Tây Ninh",""],["Quý khách","0913884755","Tây Ninh",""],["Quý khách","0964383818","Tây Ninh",""],["Quý khách","0904449294","Tây Ninh",""],["Quý khách","0936909498","Tây Ninh",""],["Quý khách","0919888254","Tây Ninh",""],["Quý khách","0915622567","Tây Ninh",""],["Quý khách","0975539568","Tây Ninh",""],["Công ty Thuận Nhân","0979442296","Tây Ninh",""],["Lý - camera/smarthome","0933268882","Tây Ninh",""],["Trình - lắp camera","0964865965","Tây Ninh",""],["Đạt Hưng","0987367279","Tây Ninh",""],["Đặng Sỹ Hiếu","0919061977","Tây Ninh","Data ấm"],["Camera Huy Tiến Phát Vlong","0979213141","Vĩnh Long",""],["Camera SmartHome Hưng Phát","0937120683","Vĩnh Long",""],["Camera Tâm Thịnh","0939832007","Vĩnh Long",""],["Camera VLong Phương Tùng","0919189818","Vĩnh Long",""],["Camera Vạn Sự Thành","0788991900","Vĩnh Long",""],["Cty tnhh mtv tmxd điện","0974999859","Vĩnh Long",""],["Cửa hàng Thiết bị điện - Đèn trang trí Toàn Thắng","0913889055","Vĩnh Long",""],["Nguyễn Bá Tường","0939010999","Vĩnh Long",""],["Trường Anh","0907839779","Vĩnh Long",""],["Viễn Thông Bình An","0939002535","Vĩnh Long",""],["Hoàng Minh","0919924445","Đồng Nai",""],["Nguyễn Xuân Vũ","0932035636","Đồng Nai",""],["Vũ Ngọc Thông","0938970379","Đồng Nai",""],["Lê Trường","0907177727","Đồng Tháp","Nóng"],["Minh Truong","0902406008","Đồng Tháp",""],["Phước","0964007412","Đồng Tháp","Lạnh"],["TRong Khanh Camera","0989766763","Đồng Tháp",""],["Thành - lắp camera","0936118158","Đồng Tháp",""],["Trung","0962113756","Đồng Tháp","Data ấm"],["Quý khách","0901859869","Chưa rõ tỉnh",""],["Quý khách","0903782814","Chưa rõ tỉnh",""],["Quý khách","0903758775","Chưa rõ tỉnh",""],["Quý khách","0976272186","Chưa rõ tỉnh",""],["Quý khách","0909772222","Chưa rõ tỉnh",""],["Quý khách","0857617617","Chưa rõ tỉnh",""],["Quý khách","0377169130","Chưa rõ tỉnh",""],["Quý khách","0909091248","Chưa rõ tỉnh",""],["Quý khách","0937934296","Chưa rõ tỉnh",""],["Quý khách","0988719827","Chưa rõ tỉnh",""],["Quý khách","0986239299","Chưa rõ tỉnh",""],["Quý khách","0908204375","Chưa rõ tỉnh",""],["Quý khách","0902555907","Chưa rõ tỉnh",""],["Quý khách","0915966239","Chưa rõ tỉnh",""],["Quý khách","0961187007","Chưa rõ tỉnh",""],["Quý khách","0842089046","Chưa rõ tỉnh",""],["Quý khách","0938238426","Chưa rõ tỉnh",""],["Quý khách","0326102168","Chưa rõ tỉnh",""],["Quý khách","0939505975","Chưa rõ tỉnh",""],["Quý khách","0906603968","Chưa rõ tỉnh",""],["Quý khách","0931588886","Chưa rõ tỉnh",""],["Quý khách","0938958246","Chưa rõ tỉnh",""],["Quý khách","0818331234","Chưa rõ tỉnh",""],["Quý khách","0976422223","Chưa rõ tỉnh",""],["Quý khách","0767671876","Chưa rõ tỉnh",""],["Quý khách","0903291679","Chưa rõ tỉnh",""],["Quý khách","0933850066","Chưa rõ tỉnh",""],["Quý khách","0966618009","Chưa rõ tỉnh",""],["Quý khách","0946246592","Chưa rõ tỉnh",""],["Quý khách","0982267857","Chưa rõ tỉnh",""],["Quý khách","0987982782","Chưa rõ tỉnh",""],["Quý khách","0986085565","Chưa rõ tỉnh",""],["Quý khách","0334241345","Chưa rõ tỉnh",""],["Quý khách","0914353286","Chưa rõ tỉnh",""],["Quý khách","0949482977","Chưa rõ tỉnh",""],["Quý khách","0938033068","Chưa rõ tỉnh",""],["Quý khách","0931489899","Chưa rõ tỉnh",""],["Quý khách","0916139712","Chưa rõ tỉnh",""],["Quý khách","0908408099","Chưa rõ tỉnh",""],["Quý khách","0901680939","Chưa rõ tỉnh",""],["Quý khách","0935307592","Chưa rõ tỉnh",""],["Quý khách","0931245245","Chưa rõ tỉnh",""],["A Thuần","0917445301","Chưa rõ tỉnh",""],["Abe/Ngoc Anh","0931859335","Chưa rõ tỉnh",""],["Anh Khoa","0963639653","Chưa rõ tỉnh",""],["Camera bidicam","0898325209","Chưa rõ tỉnh",""],["Camera shop 24g","0907508725","Chưa rõ tỉnh",""],["Camera Đại NAm","0908610787","Chưa rõ tỉnh",""],["Cửa Hàng Điện Nước Duy Tùng","0901444668","Chưa rõ tỉnh",""],["Cửa Hàng Điện Nước ĐÔNG THÀNH","0964840048","Chưa rõ tỉnh",""],["Diệu Thiện","0919626737","Chưa rõ tỉnh",""],["Hiếu Nguyễn","0908897168","Chưa rõ tỉnh",""],["Hoang Thi Hoa","0982006029","Chưa rõ tỉnh",""],["Hong Minh Nguyen","0941073111","Chưa rõ tỉnh",""],["Hoàng","0965805435","Chưa rõ tỉnh",""],["Hoàng An","0966488378","Chưa rõ tỉnh",""],["Hoàng Nam","0949586068","Chưa rõ tỉnh",""],["Hoàng Nam Phát - Thiết Bị Mạng - Camera Quan Sát","0937813788","Chưa rõ tỉnh",""],["Huy Hoàng","0902330328","Chưa rõ tỉnh",""],["Hồng Phát","0902227247","Chưa rõ tỉnh",""],["Le Mai Huu Lam","0983030039","Chưa rõ tỉnh",""],["Lee Hướng","0933419843","Chưa rõ tỉnh",""],["Linh - lắp camera","0981168762","Chưa rõ tỉnh",""],["Long Hưng Thịnh","0981201889","Chưa rõ tỉnh",""],["Lê Công Nghiệp","0903930112","Chưa rõ tỉnh",""],["Lê Hằng","0934060067","Chưa rõ tỉnh",""],["Lê Văn Sơn","0931150581","Chưa rõ tỉnh",""],["Lê Văn Thành","0903720944","Chưa rõ tỉnh",""],["Minh Khang","0906858911","Chưa rõ tỉnh",""],["Minh Khôi","0917694343","Chưa rõ tỉnh",""],["Minh Nguyễn","0367694998","Chưa rõ tỉnh",""],["Minh Quân","0917832842","Chưa rõ tỉnh",""],["Minhtu","0913877342","Chưa rõ tỉnh",""],["Nguyễn Dũng","0938330416","Chưa rõ tỉnh","Chưa đánh giá được"],["Nguyễn Tuấn Kiệt","0376518397","Chưa rõ tỉnh",""],["Ngôi nhà đẹp","0944838238","Chưa rõ tỉnh",""],["Ngọc Nhi Camera Ngọc Diệp","0853033209","Chưa rõ tỉnh",""],["Ngọc Trinh","0908135779","Chưa rõ tỉnh",""],["Nội thất Hưng Phát Sài Gòn (CN Đồng Nai)","0915655119","Chưa rõ tỉnh",""],["Phan Thành Nhân","0908585152","Chưa rõ tỉnh",""],["Phương Nam solar","0903017123","Chưa rõ tỉnh",""],["Phạm Thành Lộc","0979065053","Chưa rõ tỉnh",""],["Quang Anh","0906347229","Chưa rõ tỉnh",""],["Sáng Tạo Việt Design Build","0903593089","Chưa rõ tỉnh",""],["TRUNG PHAM","0902463008","Chưa rõ tỉnh",""],["Ta Camera","0938545969","Chưa rõ tỉnh",""],["Thanh Hà","0909296290","Chưa rõ tỉnh",""],["Thinh Phat","0789991615","Chưa rõ tỉnh",""],["Thiên Trần","0935381128","Chưa rõ tỉnh",""],["Thomb","0918204519","Chưa rõ tỉnh",""],["Thu Nguyen","0937247247","Chưa rõ tỉnh",""],["Thùy Duyên","0909151392","Chưa rõ tỉnh",""],["Trung Dũng","0908288393","Chưa rõ tỉnh",""],["Tài Camera","0967778485","Chưa rõ tỉnh",""],["Tấn Thành","0908078818","Chưa rõ tỉnh",""],["Viễn Thông Hoàng Thạch","0818001095","Chưa rõ tỉnh",""],["Vân Anh Camera","0915498787","Chưa rõ tỉnh",""],["Vũ Phong","0968005555","Chưa rõ tỉnh",""],["Điện Lạnh Điện Nước Đức Hả","0858188338","Chưa rõ tỉnh",""],["Điện nước Quân Hoa","0942942333","Chưa rõ tỉnh",""],["Đào Văn Tìm","0963528910","Chưa rõ tỉnh",""]];
-var S={cust:[],tpl:"Kính gửi {ten}, bên em xin cập nhật thông tin mới nhất đến anh/chị. Cần hỗ trợ anh/chị vui lòng liên hệ lại số này ạ.",jobs:[],log:[],cfg:{}};
-try{var raw=localStorage.getItem(KEY);if(raw){var o=JSON.parse(raw);for(var k in o)S[k]=o[k];}}catch(e){}
-if(!S.seeded&&!S.cust.length){S.cust=SEED.map(function(x){return {id:uid(),ten:x[0],sdt:x[1],nhom:x[2],ghichu:x[3]};});S.seeded=1;save();}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
-function $(id){return document.getElementById(id);}
-function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
-function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
-function normPhone(p){var d=String(p||"").replace(/[^\d+]/g,"");if(d.indexOf("+84")===0)d="0"+d.slice(3);else if(d.indexOf("84")===0&&d.length===11)d="0"+d.slice(2);return d;}
-function validPhone(p){return /^0\d{9}$/.test(p);}
-function fmt(d){var x=new Date(d);return x.toLocaleString("vi-VN",{hour12:false,day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});}
+const $=s=>document.querySelector(s);
+let S={sig:"Liên hệ: 0937677889",n:20,tp:[],c:[],t:"Chào anh/chị {ten}, em xin gửi anh/chị thông tin cập nhật về công trình {ghichu}. Anh/chị cần hỗ trợ thêm cứ nhắn lại cho em nhé!",sch:"",fired:false};
+try{const r=localStorage.getItem("zalo_app");if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+const save=()=>{try{localStorage.setItem("zalo_app",JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+const fill=(t,c)=>{const m=t.replace(/\{ten\}/g,c.name).replace(/\{sdt\}/g,c.phone).replace(/\{ghichu\}/g,c.note||"").replace(/\{nhom\}/g,c.group||"");return S.sig?m+"\n\n"+S.sig:m};
+const norm=p=>{p=String(p).replace(/[^\d+]/g,"");if(p.startsWith("+84"))p="0"+p.slice(3);else if(p.startsWith("84")&&p.length>=11)p="0"+p.slice(2);else if(p&&p[0]!=="0")p="0"+p;return p};
+const msg=(t,m)=>{$(t).textContent=m};
+const copy=async t=>{try{await navigator.clipboard.writeText(t);return true}catch(e){return false}};
 
-/* tabs */
-var tabs=["kh","soan","lich","nhatky","cd"];
-function show(t){tabs.forEach(function(x){$("p-"+x).classList.toggle("hide",x!==t);});
- document.querySelectorAll("#tabs button").forEach(function(b){b.setAttribute("aria-selected",b.dataset.t===t);});
- if(t==="soan")renderSoan();if(t==="lich")renderLich();if(t==="nhatky")renderLog();}
-$("tabs").addEventListener("click",function(e){if(e.target.dataset.t)show(e.target.dataset.t);});
+document.querySelectorAll("#nav button").forEach(b=>b.onclick=()=>tab(b.dataset.t));
+function tab(id){document.querySelectorAll("section").forEach(s=>s.classList.toggle("on",s.id===id));document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.t===id));if(id==="t2")prev();if(id==="t3")queue();if(id==="t4")stats()}
 
-/* khách hàng */
-function parse(text){
- var lines=text.split(/\r?\n/).filter(function(l){return l.trim();});
- var add=0,bad=0,dup=0;
- lines.forEach(function(l,i){
-  var d=l.indexOf("\t")>-1?"\t":(l.indexOf(";")>-1?";":",");
-  var c=l.split(d).map(function(x){return x.trim().replace(/^"|"$/g,"");});
-  var p=normPhone(c[1]);
-  if(!validPhone(p)){if(i>0||/\d{9}/.test(l))bad++;return;}
-  if(S.cust.some(function(x){return x.sdt===p;})){dup++;return;}
-  S.cust.push({id:uid(),ten:c[0]||"Quý khách",sdt:p,nhom:c[2]||"Chưa phân nhóm",ghichu:c[3]||""});add++;
- });
- save();renderKh();
- $("impMsg").textContent="Đã thêm "+add+" khách"+(dup?", bỏ "+dup+" số trùng":"")+(bad?", "+bad+" dòng sai số điện thoại":"")+".";
-}
-$("addPaste").onclick=function(){parse($("paste").value);$("paste").value="";};
-$("file").onchange=function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(){parse(String(r.result));};r.readAsText(f,"utf-8");e.target.value="";};
-$("search").oninput=renderKh;
-$("clearAll").onclick=function(){if(S.cust.length&&confirm("Xóa toàn bộ "+S.cust.length+" khách?")){S.cust=[];save();renderKh();}};
-$("khBody").onclick=function(e){var id=e.target.dataset.del;if(id){S.cust=S.cust.filter(function(c){return c.id!==id;});save();renderKh();}};
-function renderKh(){
- var q=$("search").value.trim().toLowerCase();
- var list=S.cust.filter(function(c){return !q||(c.ten+" "+c.sdt).toLowerCase().indexOf(q)>-1;});
- $("khTitle").textContent="Danh sách khách ("+S.cust.length+")";
- $("khEmpty").classList.toggle("hide",S.cust.length>0);
- $("khBody").innerHTML=list.slice(0,300).map(function(c){return "<tr><td>"+esc(c.ten)+"</td><td>"+esc(c.sdt)+"</td><td>"+esc(c.nhom)+"</td><td>"+esc(c.ghichu)+"</td><td><button class='btn danger' data-del='"+c.id+"'>Xóa</button></td></tr>";}).join("");
-}
+function importText(txt){let n=0,d=0;const have=new Set(S.c.map(c=>c.phone));
+ txt.split(/\r?\n/).forEach((ln,i)=>{ln=ln.trim();if(!ln)return;const f=ln.split(/\t|;|,/).map(x=>x.trim().replace(/^"|"$/g,""));
+  if(f.length<2)return;const ph=norm(f[1]);if(ph.replace(/\D/g,"").length<9)return;
+  if(have.has(ph)){d++;return}have.add(ph);
+  S.c.push({id:Date.now()+"_"+i,name:f[0]||"Quý khách",phone:ph,note:f[2]||"",group:f[3]||"",sel:true,status:"pending",at:""});n++});
+ save();list();msg("#impm","Đã thêm "+n+" khách"+(d?", bỏ qua "+d+" trùng SĐT":"")+".")}
+$("#bimp").onclick=()=>{importText($("#imp").value);$("#imp").value=""};
+$("#fcsv").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>importText(String(r.result));r.readAsText(f,"utf-8")};
 
-/* soạn tin */
-var VARS=[["ten","Tên"],["sdt","Số điện thoại"],["nhom","Nhóm"],["ghichu","Ghi chú"]];
-function render(t,c){return t.replace(/\{(\w+)\}/g,function(m,k){return c&&c[k]!=null&&c[k]!==""?c[k]:(c?"":m);});}
-function renderSoan(){
- $("vars").innerHTML=VARS.map(function(v){return "<button class='chip' data-v='"+v[0]+"'>{"+v[0]+"} "+v[1]+"</button>";}).join("");
- $("tpl").value=S.tpl;
- var cur=$("pv").value;
- $("pv").innerHTML=S.cust.length?S.cust.slice(0,100).map(function(c){return "<option value='"+c.id+"'>"+esc(c.ten)+" - "+esc(c.sdt)+"</option>";}).join(""):"<option value=''>Chưa có khách, dùng dữ liệu mẫu</option>";
- if(cur)$("pv").value=cur;
- prev();
-}
-function prev(){
- var c=S.cust.filter(function(x){return x.id===$("pv").value;})[0]||{ten:"Nguyễn Văn A",sdt:"0901234567",nhom:"Mẫu",ghichu:"hệ 10kWp"};
- var m=render($("tpl").value,c);$("bubble").textContent=m;$("len").textContent=m.length+" ký tự";
-}
-$("tpl").oninput=function(){S.tpl=$("tpl").value;save();prev();};
-$("pv").onchange=prev;
-$("vars").onclick=function(e){var v=e.target.dataset.v;if(!v)return;var t=$("tpl"),s=t.selectionStart||t.value.length;t.value=t.value.slice(0,s)+"{"+v+"}"+t.value.slice(s);S.tpl=t.value;save();prev();t.focus();};
+function list(){const k=$("#q").value.toLowerCase();
+ const gv=$("#grp").value;$("#grp").innerHTML='<option value="">Mọi nhóm</option>'+[...new Set(S.c.map(c=>c.group).filter(Boolean))].map(x=>`<option ${x===gv?"selected":""}>${esc(x)}</option>`).join("");const rows=flt();
+ $("#cnt").textContent=S.c.length+" khách · "+S.c.filter(c=>c.sel).length+" đang chọn";
+ $("#tb").innerHTML="<tr><th></th><th>Tên</th><th>SĐT</th><th>Ghi chú</th><th>Nhóm</th><th>Trạng thái</th></tr>"+rows.map(c=>`<tr><td><input type="checkbox" data-id="${c.id}" ${c.sel?"checked":""} style="width:auto"></td><td>${esc(c.name)}</td><td>${esc(c.phone)}</td><td class="w">${esc(c.note)}</td><td>${esc(c.group)}</td><td><span class="b ${c.status}">${c.status==="sent"?"Đã gửi":"Chưa gửi"}</span></td></tr>`).join("")||"<tr><td colspan=6 class=mu>Chưa có khách nào.</td></tr>";
+ $("#tb").querySelectorAll("input[data-id]").forEach(i=>i.onchange=()=>{S.c.find(c=>c.id===i.dataset.id).sel=i.checked;save();$("#cnt").textContent=S.c.length+" khách · "+S.c.filter(c=>c.sel).length+" đang chọn"})}
+$("#q").oninput=list;$("#grp").onchange=list;$("#st").onchange=list;
+function flt(){const k=$("#q").value.toLowerCase(),g=$("#grp").value,s=$("#st").value;return S.c.filter(c=>(c.name+c.phone+c.group+c.note).toLowerCase().includes(k)&&(!g||c.group===g)&&(!s||c.status===s))}
+$("#bflt").onclick=()=>{const ids=new Set(flt().map(c=>c.id));S.c.forEach(c=>c.sel=ids.has(c.id));save();list()};
+$("#ball").onclick=()=>{S.c.forEach(c=>c.sel=true);save();list()};
+$("#bnone").onclick=()=>{S.c.forEach(c=>c.sel=false);save();list()};
+$("#bdel").onclick=()=>{S.c=S.c.filter(c=>!c.sel);save();list()};
 
-/* lịch gửi */
-function groups(){var g={};S.cust.forEach(function(c){g[c.nhom]=(g[c.nhom]||0)+1;});return g;}
-function recips(g){return S.cust.filter(function(c){return g==="__all"||c.nhom===g;});}
-function renderLich(){
- var g=groups(),h="<option value='__all'>Tất cả ("+S.cust.length+")</option>";
- Object.keys(g).forEach(function(k){h+="<option value='"+esc(k)+"'>"+esc(k)+" ("+g[k]+")</option>";});
- var cur=$("grp").value;$("grp").innerHTML=h;if(cur)$("grp").value=cur;
- $("jobEmpty").classList.toggle("hide",S.jobs.length>0);
- $("jobBody").innerHTML=S.jobs.slice().reverse().map(function(j){
-  var cls=j.status==="Đã gửi"?"ok":"warn";
-  return "<tr><td>"+fmt(j.time)+"</td><td>"+esc(j.nhom==="__all"?"Tất cả":j.nhom)+"</td><td>"+j.ids.length+"</td><td class='"+cls+"'>"+j.status+"</td><td>"+(j.status==="Chờ gửi"?"<button class='btn danger' data-cancel='"+j.id+"'>Hủy</button>":"")+"</td></tr>";}).join("");
-}
-function runJob(j){
- var tp=S.tpl,t=Date.now();
- j.ids.forEach(function(id){var c=S.cust.filter(function(x){return x.id===id;})[0];if(!c)return;
-  S.log.push({t:t,ten:c.ten,sdt:c.sdt,msg:render(tp,c),st:"Đã gửi (mô phỏng)"});});
- if(S.log.length>2000)S.log=S.log.slice(-2000);
- j.status="Đã gửi";save();
-}
-$("mkJob").onclick=function(){
- var g=$("grp").value,w=$("when").value,r=recips(g);
- if(!r.length){$("jobMsg").textContent="Chưa có khách trong nhóm này.";return;}
- if(!w){$("jobMsg").textContent="Chọn thời gian gửi.";return;}
- S.jobs.push({id:uid(),time:new Date(w).getTime(),nhom:g,ids:r.map(function(c){return c.id;}),status:"Chờ gửi"});
- save();renderLich();$("jobMsg").textContent="Đã lên lịch cho "+r.length+" khách.";
-};
-$("sendNow").onclick=function(){
- var r=recips($("grp").value);if(!r.length){$("jobMsg").textContent="Chưa có khách trong nhóm này.";return;}
- var j={id:uid(),time:Date.now(),nhom:$("grp").value,ids:r.map(function(c){return c.id;}),status:"Chờ gửi"};
- S.jobs.push(j);runJob(j);renderLich();$("jobMsg").textContent="Đã gửi mô phỏng "+r.length+" tin, xem ở tab Nhật ký.";
-};
-$("jobBody").onclick=function(e){var id=e.target.dataset.cancel;if(id){S.jobs=S.jobs.filter(function(j){return j.id!==id;});save();renderLich();}};
-setInterval(function(){var ch=false,n=Date.now();S.jobs.forEach(function(j){if(j.status==="Chờ gửi"&&j.time<=n){runJob(j);ch=true;}});if(ch&&!$("p-lich").classList.contains("hide"))renderLich();if(ch&&!$("p-nhatky").classList.contains("hide"))renderLog();},15000);
+$("#tpl").value=S.t;
+$("#tpl").oninput=()=>{S.t=$("#tpl").value;save();prev()};
+document.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{const t=$("#tpl"),p=t.selectionStart;t.value=t.value.slice(0,p)+b.dataset.v+t.value.slice(t.selectionEnd);t.focus();S.t=t.value;save();prev()});
+function prev(){const c=S.c[0]||{name:"Nguyễn Văn A",phone:"0901234567",note:"nhà phố",group:""};$("#prev").textContent=fill(S.t,c)}
+$("#sig").value=S.sig;$("#sig").oninput=()=>{S.sig=$("#sig").value;save();prev()};
+function tp(){$("#tsel").innerHTML=S.tp.map((x,i)=>`<option value="${i}">${esc(x.n)}</option>`).join("")||'<option value="">Chưa có bài mẫu</option>'}
+$("#tsave").onclick=()=>{const n=$("#tname").value.trim();if(!n)return;S.tp.push({n,t:S.t});$("#tname").value="";save();tp()};
+$("#tload").onclick=()=>{const x=S.tp[$("#tsel").value];if(x){S.t=x.t;$("#tpl").value=x.t;save();prev()}};
+$("#tdel").onclick=()=>{const i=$("#tsel").value;if(i!==""){S.tp.splice(+i,1);save();tp()}};
+tp();
 
-/* nhật ký */
-function renderLog(){
- $("logEmpty").classList.toggle("hide",S.log.length>0);
- $("logBody").innerHTML=S.log.slice(-200).reverse().map(function(l){return "<tr><td>"+fmt(l.t)+"</td><td>"+esc(l.ten)+"</td><td>"+esc(l.sdt)+"</td><td class='ok'>"+esc(l.st)+"</td></tr>";}).join("");
-}
-$("clrLog").onclick=function(){if(S.log.length&&confirm("Xóa nhật ký?")){S.log=[];save();renderLog();}};
-$("exp").onclick=function(){
- if(!S.log.length)return;
- var rows=[["Giờ","Tên","Số","Nội dung","Trạng thái"]].concat(S.log.map(function(l){return [fmt(l.t),l.ten,l.sdt,l.msg,l.st];}));
- var csv="\ufeff"+rows.map(function(r){return r.map(function(x){return '"'+String(x).replace(/"/g,'""')+'"';}).join(",");}).join("\r\n");
- try{var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));a.download="nhat-ky-zalo.csv";a.click();}catch(e){}
-};
+function queue(){const all=S.c.filter(c=>c.sel);const todo=all.filter(c=>c.status!=="sent");const q=todo.slice(0,S.n||20);
+ $("#qm").textContent="Đợt này "+q.length+" khách · còn "+todo.length+" chưa gửi / "+all.length+" đã chọn";
+ $("#queue").innerHTML=q.map(c=>`<div class="q"><div class="row" style="margin:0"><b>${esc(c.name)}</b><span class="mu">${esc(c.phone)}</span><span class="b ${c.status}">${c.status==="sent"?"Đã gửi":"Chưa gửi"}</span></div><div class="msg">${esc(fill(S.t,c))}</div><div class="row" style="margin:0"><button class="p s" data-go="${c.id}">Sao chép &amp; mở Zalo</button><button class="s" data-ok="${c.id}">${c.status==="sent"?"Bỏ đánh dấu":"Đánh dấu đã gửi"}</button></div></div>`).join("")||'<p class="mu">'+(all.length?"Đã gửi hết danh sách đã chọn.":"Chưa chọn khách nào. Quay lại bước 1 để chọn.")+"</p>";
+ $("#queue").querySelectorAll("[data-go]").forEach(b=>b.onclick=async()=>{const c=S.c.find(x=>x.id===b.dataset.go);const ok=await copy(fill(S.t,c));window.open("https://zalo.me/"+c.phone,"_blank","noopener");c.status="sent";c.at=new Date().toLocaleString("vi-VN");save();queue();if(!ok)alert("Không tự sao chép được, hãy copy nội dung tin ở trên.")});
+ $("#queue").querySelectorAll("[data-ok]").forEach(b=>b.onclick=()=>{const c=S.c.find(x=>x.id===b.dataset.ok);c.status=c.status==="sent"?"pending":"sent";c.at=c.status==="sent"?new Date().toLocaleString("vi-VN"):"";save();queue()})}
 
-/* cài đặt */
-["oa","tid","oal","myp"].forEach(function(k){$(k).value=(S.cfg||{})[k]||"";});
-$("saveCfg").onclick=function(){S.cfg={};["oa","tid","oal","myp"].forEach(function(k){S.cfg[k]=$(k).value.trim();});save();$("cfgMsg").textContent="Đã lưu.";};
+$("#nb").value=S.n;$("#nb").onchange=()=>{S.n=Math.max(1,+$("#nb").value||20);save();queue()};
+$("#sch").value=S.sch;schm();
+function schm(){$("#schm").textContent=S.sch?"Đã hẹn: "+new Date(S.sch).toLocaleString("vi-VN"):"Chưa hẹn giờ."}
+$("#bsch").onclick=()=>{S.sch=$("#sch").value;S.fired=false;save();schm()};
+$("#bclr").onclick=()=>{S.sch="";$("#sch").value="";S.fired=false;save();schm()};
+setInterval(()=>{if(S.sch&&!S.fired&&Date.now()>=new Date(S.sch).getTime()){S.fired=true;save();const n=S.c.filter(c=>c.sel&&c.status!=="sent").length;const a=$("#al");a.style.display="block";a.textContent="Đến giờ gửi tin! Còn "+n+" khách chưa gửi trong hàng đợi.";tab("t3")}},15000);
 
-renderKh();
-})();
-</script>
-</body>
-</html>
+function stats(){const s=S.c.filter(c=>c.status==="sent").length;
+ $("#stats").innerHTML=`<div class="stat"><b>${S.c.length}</b>Tổng khách</div><div class="stat"><b>${s}</b>Đã gửi</div><div class="stat"><b>${S.c.length-s}</b>Chưa gửi</div><div class="stat"><b>${S.c.length?Math.round(s*100/S.c.length):0}%</b>Hoàn thành</div>`}
+$("#bcopy").onclick=async()=>{const t="Tên,SĐT,Ghi chú,Nhóm,Trạng thái,Thời gian\n"+S.c.map(c=>[c.name,c.phone,c.note,c.group,c.status==="sent"?"Đã gửi":"Chưa gửi",c.at].map(x=>'"'+String(x||"").replace(/"/g,'""')+'"').join(",")).join("\n");msg("#rm",(await copy(t))?"Đã sao chép, dán vào Excel/Google Sheets.":"Không sao chép được.")};
+$("#breset").onclick=()=>{S.c.forEach(c=>{c.status="pending";c.at=""});save();stats()};
+list();
+</script></body></html>
